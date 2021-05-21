@@ -3,13 +3,15 @@ package dao
 import (
 	"RedSaludAtv/atv/entites"
 	"database/sql"
+	"fmt"
 )
 
 type SubscriptionDao struct {
 	Db *sql.DB
 }
 
-func (subscriptionDao SubscriptionDao) Create(subscription entites.Subscription) error {
+func (subscriptionDao SubscriptionDao) Create(subscription *entites.Subscription) error {
+	fmt.Println(subscription.FechaNacimiento)
 	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(fecha_nacimiento, telefono, tipo, tc_datos, idplan, frecuencia_pago, tipo_afiliacion) values(STR_TO_DATE(? ,'%d-%m-%Y'),?,?,?,?,?,?)", subscription.FechaNacimiento, subscription.CelNumber, 3, subscription.TcDatos, subscription.IdPlan, subscription.FrecuenciaPago, subscription.TipoAfiliacion)
 	if err != nil {
 		return err
