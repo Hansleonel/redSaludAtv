@@ -44,8 +44,13 @@ func CreateSubscription(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if subscription.FechaNacimiento == "" || subscription.CelNumber == "" || subscription.TcDatos == "" {
+			requestError := entites.SubsError{
+				Type:   "/api/atv/subscription",
+				Title:  "Error 400",
+				Detail: "Bad Request",
+			}
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode("error con los campos enviados")
+			json.NewEncoder(w).Encode(requestError)
 			return
 		}
 

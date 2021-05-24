@@ -23,3 +23,20 @@ type Subscription struct {
 	FrecuenciaPago    int8   `json:"subscription_frecuenciaPago"`
 	TipoAfiliacion    int8   `json:"subscription_tipoAfiliacion"`
 }
+
+type SubscriptionStepOne struct {
+	Id              int64  `json:"subscription_id"`
+	FechaNacimiento string `json:"subscription_fechaNacimiento"`
+	CelNumber       string `json:"subscription_celNumber"`
+	Type            int    `json:"subscription_type"`
+	TcDatos         string `json:"subscription_tcDatos"`
+	IdPlan          int64  `json:"subscription_idPlan"`
+	FrecuenciaPago  int8   `json:"subscription_frecuenciaPago"`
+	TipoAfiliacion  int8   `json:"subscription_tipoAfiliacion"`
+}
+
+type SubsError struct {
+	Type   string `json:"type"`
+	Title  string `json:"title"`
+	Detail string `json:"detail"`
+}
