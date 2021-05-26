@@ -7,6 +7,8 @@ import (
 	"RedSaludAtv/utils"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -120,7 +122,7 @@ func UpdateSubscription(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(err)
 		} else {
-			if rows>0{
+			if rows > 0 {
 				w.WriteHeader(http.StatusCreated)
 				json.NewEncoder(w).Encode(subscriptionStepTwo)
 			}
@@ -141,5 +143,33 @@ func GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 		utils.RespondWithSuccess(subscriptions, w)
 	} else {
 		utils.RespondWithError(err, w)
+	}
+}
+
+func GetDataPerson(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+
+	var dataQuery entites.DataQuery
+	_ = json.NewDecoder(r.Body).Decode(&dataQuery)
+
+	response, err := http.Get("https://api.dniruc.com/api/search/dni/" + dataQuery.DniQuery + "/Test_4b425b9c9776b4e9896fac7b3e29829e6366f693")
+
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		responseData, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			fmt.Println(string(responseData))
+
+			var responsePerson entites.PersonReniec
+
+			json.Unmarshal(responseData, &responsePerson)
+
+			fmt.Println(responsePerson.Data)
+
+			utils.RespondWithSuccess(responsePerson.Data, w)
+		}
 	}
 }
