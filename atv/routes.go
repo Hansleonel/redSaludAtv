@@ -9,4 +9,7 @@ func Routes(r *mux.Router) {
 	r.HandleFunc("/api/atv/subscription", middleware.GetSubscriptions).Methods("GET")
 
 	r.HandleFunc("/api/atv/subscription", middleware.CreateSubscription).Methods("POST")
+	r.HandleFunc("/api/atv/subscription/stepOne", middleware.CreateSubscriptionStepOne).Methods("POST")
+
+	r.HandleFunc("/api/atv/subscription/stepTwo", middleware.UpdateSubscription).Methods("PUT")
 }
