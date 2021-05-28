@@ -32,7 +32,7 @@ func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entite
 }
 
 func (subscriptionDao SubscriptionDao) Update(subscriptionStepTwo entites.SubscriptionStepTwo) (int64, error) {
-	result, err := subscriptionDao.Db.Exec("UPDATE asegurado_suscripcion set nro_documento = ?, nombre1 = ?, nombre2 = ?, apellido_parteno = ?, apellido_materno = ?, correo = ? WHERE idasegurado_suscripcion = ?", subscriptionStepTwo.NumDoc, subscriptionStepTwo.Nom1, subscriptionStepTwo.Nom2, subscriptionStepTwo.Ape1, subscriptionStepTwo.Ape2, subscriptionStepTwo.Mail, subscriptionStepTwo.Id)
+	result, err := subscriptionDao.Db.Exec("UPDATE asegurado_suscripcion SET idtipodocumento = ?, nro_documento = ?, nombre1 = ?, nombre2 = ?, apellido_parteno = ?, apellido_materno = ?, correo = ? WHERE idasegurado_suscripcion = ?", subscriptionStepTwo.TypeDoc, subscriptionStepTwo.NumDoc, subscriptionStepTwo.Nom1, subscriptionStepTwo.Nom2, subscriptionStepTwo.Ape1, subscriptionStepTwo.Ape2, subscriptionStepTwo.Mail, subscriptionStepTwo.Id)
 	if err != nil {
 		return 0, err
 	} else {
@@ -43,19 +43,20 @@ func (subscriptionDao SubscriptionDao) Update(subscriptionStepTwo entites.Subscr
 
 func (subscriptionDao SubscriptionDao) FindAll() ([]entites.Subscription, error) {
 	var subscriptionsArray []entites.Subscription
-	rows, err := subscriptionDao.Db.Query("select idasegurado_suscripcion, nro_documento, apellido_parteno, apellido_materno, nombre1, nombre2 from asegurado_suscripcion	")
+	rows, err := subscriptionDao.Db.Query("select idasegurado_suscripcion, nro_documento, apellido_parteno, apellido_materno, nombre1, nombre2 from asegurado_suscripcion limit 5")
 
 	if err != nil {
 		return nil, err
 	} else {
 		for rows.Next() {
 			var subscription entites.Subscription
-
-			err = rows.Scan(&subscription.Id, &subscription.NumDoc, &subscription.Ape1, &subscription.Ape2, &subscription.Nom1, &subscription.Nom2)
+			var numDoc interface {}
+			err = rows.Scan(&subscription.Id, &numDoc, &subscription.Ape1, &subscription.Ape2, &subscription.Nom1, &subscription.Nom2)
 
 			if err != nil {
 				return nil, err
 			} else {
+				subscription.NumDoc = fmt.Sprintf("%s", numDoc)
 				subscriptionsArray = append(subscriptionsArray, subscription)
 			}
 		}
@@ -78,5 +79,13 @@ func (subscriptionDao SubscriptionDao) ValidationDni(validation entites.Validati
 		}
 		return cant, err
 	}
+}
 
+func (subscriptionDao SubscriptionDao) UpdateDeclaration(subscriptionStepThree entites.SubscriptionStepThree) (int64, error) {
+	result, err := subscriptionDao.Db.Exec("UPDATE asegurado_suscripcion SET declaracion_jurada = ?, pregunta1 = ?, pregunta2 = ?, pregunta3 = ? WHERE idasegurado_suscripcion = ?", subscriptionStepThree.DecJur, subscriptionStepThree.QuestionFirst, subscriptionStepThree.QuestionSecond, subscriptionStepThree.QuestionThird, subscriptionStepThree.Id)
+	if err != nil {
+		return 0, err
+	} else {
+		return result.RowsAffected()
+	}
 }

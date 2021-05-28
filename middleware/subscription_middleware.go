@@ -109,7 +109,7 @@ func UpdateSubscription(w http.ResponseWriter, r *http.Request) {
 			requestError := entites.SubsError{
 				Type:   "/api/atv/subscription/stepTwo",
 				Title:  "Error 400",
-				Detail: "Bad Request",
+				Detail: "Bad Request, Values Required",
 			}
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(requestError)
@@ -123,7 +123,7 @@ func UpdateSubscription(w http.ResponseWriter, r *http.Request) {
 			json.NewEncoder(w).Encode(err)
 		} else {
 			if rows > 0 {
-				w.WriteHeader(http.StatusCreated)
+				w.WriteHeader(http.StatusOK)
 				json.NewEncoder(w).Encode(subscriptionStepTwo)
 			}
 		}
@@ -214,5 +214,43 @@ func GetValidationPerson(w http.ResponseWriter, r *http.Request) {
 
 			json.NewEncoder(w).Encode(validationDni)
 		}
+	}
+}
+
+func UpdateDeclaration(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+	var subscriptionStepThree entites.SubscriptionStepThree
+	_ = json.NewDecoder(r.Body).Decode(&subscriptionStepThree)
+	db, err := config.GetMySQLDB()
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		subscriptionDao := dao.SubscriptionDao{
+			Db: db,
+		}
+
+		if subscriptionStepThree.DecJur == "" || subscriptionStepThree.QuestionFirst == "" || subscriptionStepThree.QuestionSecond == "" || subscriptionStepThree.QuestionThird == "" {
+			requestError := entites.SubsError{
+				Type:   "/api/atv/subscription/stepThree",
+				Title:  "Error 400",
+				Detail: "Bad Request,Values Required",
+			}
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(requestError)
+			return
+		}
+
+		rows, err := subscriptionDao.UpdateDeclaration(subscriptionStepThree)
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(err)
+		} else {
+			if rows > 0 {
+				w.WriteHeader(http.StatusOK)
+				json.NewEncoder(w).Encode(subscriptionStepThree)
+			}
+		}
+
 	}
 }

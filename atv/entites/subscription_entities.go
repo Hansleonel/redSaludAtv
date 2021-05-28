@@ -36,16 +36,18 @@ type SubscriptionStepOne struct {
 }
 
 type SubscriptionStepTwo struct {
-	Id     int64  `json:"subscription_id"`
-	NumDoc string `json:"subscription_numDoc"`
-	Ape1   string `json:"subscription_ape1"`
-	Ape2   string `json:"subscription_ape2"`
-	Nom1   string `json:"subscription_nom1"`
-	Nom2   string `json:"subscription_nom2"`
-	Mail   string `json:"subscription_mail"`
+	Id      int64  `json:"subscription_id"`
+	TypeDoc int8   `json:"subscription_typeDoc"`
+	NumDoc  string `json:"subscription_numDoc"`
+	Ape1    string `json:"subscription_ape1"`
+	Ape2    string `json:"subscription_ape2"`
+	Nom1    string `json:"subscription_nom1"`
+	Nom2    string `json:"subscription_nom2"`
+	Mail    string `json:"subscription_mail"`
 }
 
 type SubscriptionStepThree struct {
+	Id             int64  `json:"id"`
 	DecJur         string `json:"declaracion_jurada"`
 	QuestionFirst  string `json:"question_01"`
 	QuestionSecond string `json:"question_02"`
