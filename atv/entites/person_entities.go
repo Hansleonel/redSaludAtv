@@ -22,3 +22,8 @@ type DataPerson struct {
 type DataQuery struct {
 	DniQuery string `json:"dni_query"`
 }
+
+type ValidationPerson struct {
+	DniValidation string `json:"dni_validation"`
+	Validate      bool   `json:"validate"`
+}

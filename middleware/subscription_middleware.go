@@ -173,3 +173,46 @@ func GetDataPerson(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+func GetValidationPerson(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+	var validationDni entites.ValidationPerson
+	_ = json.NewDecoder(r.Body).Decode(&validationDni)
+
+	db, err := config.GetMySQLDB()
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		subscriptionDao := dao.SubscriptionDao{
+			Db: db,
+		}
+
+		if len(validationDni.DniValidation) != 8 {
+			requestError := entites.SubsError{
+				Type:   "/api/atv/subscription/validationPerson",
+				Title:  "Error 400",
+				Detail: "Bad Request, Length of Dni",
+			}
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(requestError)
+			return
+		}
+
+		validate, err := subscriptionDao.ValidationDni(validationDni)
+		if err != nil {
+			fmt.Println(err)
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(err)
+		} else {
+			w.WriteHeader(http.StatusOK)
+
+			if validate == 0 {
+				validationDni.Validate = true
+			} else {
+				validationDni.Validate = false
+			}
+
+			json.NewEncoder(w).Encode(validationDni)
+		}
+	}
+}

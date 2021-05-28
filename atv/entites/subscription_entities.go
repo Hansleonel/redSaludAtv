@@ -45,6 +45,13 @@ type SubscriptionStepTwo struct {
 	Mail   string `json:"subscription_mail"`
 }
 
+type SubscriptionStepThree struct {
+	DecJur         string `json:"declaracion_jurada"`
+	QuestionFirst  string `json:"question_01"`
+	QuestionSecond string `json:"question_02"`
+	QuestionThird  string `json:"question_03"`
+}
+
 type SubsError struct {
 	Type   string `json:"type"`
 	Title  string `json:"title"`

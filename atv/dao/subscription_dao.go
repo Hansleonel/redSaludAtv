@@ -63,3 +63,20 @@ func (subscriptionDao SubscriptionDao) FindAll() ([]entites.Subscription, error)
 
 	return subscriptionsArray, err
 }
+
+func (subscriptionDao SubscriptionDao) ValidationDni(validation entites.ValidationPerson) (int8, error) {
+	result, err := subscriptionDao.Db.Query("select count(a.idasegurado) as cant from certificado c inner join certificado_asegurado ca on ca.idcertificado=c.idcertificado inner join asegurado a on a.idasegurado = ca.idasegurado and a.nro_documento=? where c.idplan=1 and estado_afiliacion=1", validation.DniValidation)
+	var cant int8
+	if err != nil {
+		fmt.Println(err.Error())
+		return 0, err
+	} else {
+		for result.Next() {
+			err = result.Scan(&cant)
+			fmt.Println(err)
+			fmt.Println(cant)
+		}
+		return cant, err
+	}
+
+}
