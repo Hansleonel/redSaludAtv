@@ -25,14 +25,14 @@ type Subscription struct {
 }
 
 type SubscriptionStepOne struct {
-	Id              int64  `json:"subscription_id"`
-	FechaNacimiento string `json:"subscription_fechaNacimiento"`
-	CelNumber       string `json:"subscription_celNumber"`
-	Type            int    `json:"subscription_type"`
-	TcDatos         string `json:"subscription_tcDatos"`
-	IdPlan          int64  `json:"subscription_idPlan"`
-	FrecuenciaPago  int8   `json:"subscription_frecuenciaPago"`
-	TipoAfiliacion  int8   `json:"subscription_tipoAfiliacion"`
+	Id              int64  `json:"id"`
+	FechaNacimiento string `json:"fechaNacimiento"`
+	CelNumber       string `json:"celNumber"`
+	Type            int    `json:"type"`
+	TcDatos         string `json:"tcDatos"`
+	IdPlan          int64  `json:"idPlan"`
+	FrecuenciaPago  int8   `json:"frecuenciaPago"`
+	TipoAfiliacion  int8   `json:"tipoAfiliacion"`
 }
 
 type SubscriptionStepTwo struct {

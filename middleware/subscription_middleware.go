@@ -72,7 +72,7 @@ func CreateSubscriptionStepOne(w http.ResponseWriter, r *http.Request) {
 			requestError := entites.SubsError{
 				Type:   "/api/atv/subscription/stepOne",
 				Title:  "Error 400",
-				Detail: "Bad Request",
+				Detail: "Bad Request, values required",
 			}
 			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(requestError)
@@ -82,7 +82,7 @@ func CreateSubscriptionStepOne(w http.ResponseWriter, r *http.Request) {
 		err := subscriptionDao.CreateStepOne(&subscriptionStepOne)
 
 		if err != nil {
-			w.WriteHeader(http.StatusNotFound)
+			w.WriteHeader(http.StatusBadRequest)
 			json.NewEncoder(w).Encode(err)
 		} else {
 			w.WriteHeader(http.StatusCreated)
