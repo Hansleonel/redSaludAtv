@@ -146,7 +146,7 @@ func GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetDataPerson(w http.ResponseWriter, r *http.Request) {
+func PostDataPerson(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 
 	var dataQuery entites.DataQuery
@@ -174,7 +174,7 @@ func GetDataPerson(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetValidationPerson(w http.ResponseWriter, r *http.Request) {
+func PostValidationPerson(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	var validationDni entites.ValidationPerson
 	_ = json.NewDecoder(r.Body).Decode(&validationDni)
