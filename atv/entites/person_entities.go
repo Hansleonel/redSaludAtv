@@ -2,21 +2,19 @@ package entites
 
 type PersonReniec struct {
 	Success bool       `json:"success"`
-	Message string     `json:"message"`
+	Message int8       `json:"origen"`
 	Data    DataPerson `json:"data"`
 }
 
 type DataPerson struct {
-	Verificador     int8   `json:"verificador"`
-	Dni             string `json:"dni"`
-	NombreCompleto  string `json:"nombre_completo"`
-	Nombres         string `json:"nombres"`
-	ApellidoPaterno string `json:"ap_paterno"`
-	ApellidoMaterno string `json:"ap_materno"`
-	ApellidoCasada  string `json:"ap_casada"`
-	FechaNacimiento string `json:"fecha_nacimiento"`
-	Ubigeo          string `json:"ubigeo"`
-	Direccion       string `json:"direccion"`
+	Dni                string `json:"numero"`
+	Nombres            string `json:"nombres"`
+	ApellidoPaterno    string `json:"apellido_paterno"`
+	ApellidoMaterno    string `json:"apellido_materno"`
+	Sexo               string `json:"sexo"`
+	CodigoVerificacion string `json:"codigo_verificacion"`
+	FechaNacimiento    string `json:"fecha_nacimiento"`
+	NombreCompleto     string `json:"nombre_completo"`
 }
 
 type DataQuery struct {

@@ -13,6 +13,7 @@ type SubscriptionDao struct {
 func (subscriptionDao SubscriptionDao) Create(subscription *entites.Subscription) error {
 	fmt.Println(subscription.FechaNacimiento)
 	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento, apellido_parteno, apellido_materno, nombre1, nombre2, fecha_nacimiento, correo, telefono, tipo, idcontratante, tc_datos, tc_comunicaciones, tc_pago, estado, tipo_procesamiento, idplan, frecuencia_pago, tipo_afiliacion) values(?,?,?,?,?,?,STR_TO_DATE(? ,'%d-%m-%Y'),?,?,?,?,?,?,?,?,?,?,?,?)", subscription.TypeDocument, subscription.NumDoc, subscription.Ape1, subscription.Ape2, subscription.Nom1, subscription.Nom2, subscription.FechaNacimiento, subscription.Mail, subscription.CelNumber, subscription.Type, subscription.IdContratante, subscription.TcDatos, subscription.TcComunicaciones, subscription.TcPagos, subscription.Estado, subscription.TypeProcesamiento, subscription.IdPlan, subscription.FrecuenciaPago, subscription.TipoAfiliacion)
+	subscriptionDao.Db.Close()
 	if err != nil {
 		return err
 	} else {
@@ -23,6 +24,7 @@ func (subscriptionDao SubscriptionDao) Create(subscription *entites.Subscription
 
 func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entites.SubscriptionStepOne) error {
 	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(fecha_nacimiento, telefono, tipo, tc_datos, idplan, frecuencia_pago, tipo_afiliacion) values(STR_TO_DATE(? ,'%d-%m-%Y'),?,?,?,?,?,?)", subscriptionStepOne.FechaNacimiento, subscriptionStepOne.CelNumber, subscriptionStepOne.Type, subscriptionStepOne.TcDatos, subscriptionStepOne.IdPlan, subscriptionStepOne.FrecuenciaPago, subscriptionStepOne.TipoAfiliacion)
+	subscriptionDao.Db.Close()
 	if err != nil {
 		return err
 	} else {
@@ -33,6 +35,7 @@ func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entite
 
 func (subscriptionDao SubscriptionDao) Update(subscriptionStepTwo entites.SubscriptionStepTwo) (int64, error) {
 	result, err := subscriptionDao.Db.Exec("UPDATE asegurado_suscripcion SET idtipodocumento = ?, nro_documento = ?, nombre1 = ?, nombre2 = ?, apellido_parteno = ?, apellido_materno = ?, correo = ? WHERE idasegurado_suscripcion = ?", subscriptionStepTwo.TypeDoc, subscriptionStepTwo.NumDoc, subscriptionStepTwo.Nom1, subscriptionStepTwo.Nom2, subscriptionStepTwo.Ape1, subscriptionStepTwo.Ape2, subscriptionStepTwo.Mail, subscriptionStepTwo.Id)
+	subscriptionDao.Db.Close()
 	if err != nil {
 		return 0, err
 	} else {
@@ -44,13 +47,13 @@ func (subscriptionDao SubscriptionDao) Update(subscriptionStepTwo entites.Subscr
 func (subscriptionDao SubscriptionDao) FindAll() ([]entites.Subscription, error) {
 	var subscriptionsArray []entites.Subscription
 	rows, err := subscriptionDao.Db.Query("select idasegurado_suscripcion, nro_documento, apellido_parteno, apellido_materno, nombre1, nombre2 from asegurado_suscripcion limit 5")
-
+	subscriptionDao.Db.Close()
 	if err != nil {
 		return nil, err
 	} else {
 		for rows.Next() {
 			var subscription entites.Subscription
-			var numDoc interface {}
+			var numDoc interface{}
 			err = rows.Scan(&subscription.Id, &numDoc, &subscription.Ape1, &subscription.Ape2, &subscription.Nom1, &subscription.Nom2)
 
 			if err != nil {
@@ -67,6 +70,7 @@ func (subscriptionDao SubscriptionDao) FindAll() ([]entites.Subscription, error)
 
 func (subscriptionDao SubscriptionDao) ValidationDni(validation entites.ValidationPerson) (int8, error) {
 	result, err := subscriptionDao.Db.Query("select count(a.idasegurado) as cant from certificado c inner join certificado_asegurado ca on ca.idcertificado=c.idcertificado inner join asegurado a on a.idasegurado = ca.idasegurado and a.nro_documento=? where c.idplan=1 and estado_afiliacion=1", validation.DniValidation)
+	subscriptionDao.Db.Close()
 	var cant int8
 	if err != nil {
 		fmt.Println(err.Error())
@@ -83,6 +87,7 @@ func (subscriptionDao SubscriptionDao) ValidationDni(validation entites.Validati
 
 func (subscriptionDao SubscriptionDao) UpdateDeclaration(subscriptionStepThree entites.SubscriptionStepThree) (int64, error) {
 	result, err := subscriptionDao.Db.Exec("UPDATE asegurado_suscripcion SET declaracion_jurada = ?, pregunta1 = ?, pregunta2 = ?, pregunta3 = ? WHERE idasegurado_suscripcion = ?", subscriptionStepThree.DecJur, subscriptionStepThree.QuestionFirst, subscriptionStepThree.QuestionSecond, subscriptionStepThree.QuestionThird, subscriptionStepThree.Id)
+	subscriptionDao.Db.Close()
 	if err != nil {
 		return 0, err
 	} else {

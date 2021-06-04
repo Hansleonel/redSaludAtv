@@ -5,6 +5,7 @@ import (
 	"RedSaludAtv/atv/entites"
 	"RedSaludAtv/config"
 	"RedSaludAtv/utils"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -148,12 +149,15 @@ func GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 
 func PostDataPerson(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
+	w.Header().Set("Authorization", "Bearer 2300ffa8c8403056fe54a11a4ce463845c47b9d156d1642ed8b1311fe9f6f577")
 
 	var dataQuery entites.DataQuery
 	_ = json.NewDecoder(r.Body).Decode(&dataQuery)
 
-	response, err := http.Get("https://api.dniruc.com/api/search/dni/" + dataQuery.DniQuery + "/Test_4b425b9c9776b4e9896fac7b3e29829e6366f693")
+	// response, err := http.Get("https://api.dniruc.com/api/search/dni/" + dataQuery.DniQuery + "/Test_4b425b9c9776b4e9896fac7b3e29829e6366f693")
 
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	response, err := http.Get("https://consulta.apiperu.pe/api/dni/" + dataQuery.DniQuery)
 	if err != nil {
 		fmt.Println(err.Error())
 	} else {
