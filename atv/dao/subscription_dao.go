@@ -23,7 +23,7 @@ func (subscriptionDao SubscriptionDao) Create(subscription *entites.Subscription
 }
 
 func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entites.SubscriptionStepOne) error {
-	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(fecha_nacimiento, telefono, tipo, tc_datos, idplan, frecuencia_pago, tipo_afiliacion) values(STR_TO_DATE(? ,'%d-%m-%Y'),?,?,?,?,?,?)", subscriptionStepOne.FechaNacimiento, subscriptionStepOne.CelNumber, subscriptionStepOne.Type, subscriptionStepOne.TcDatos, subscriptionStepOne.IdPlan, subscriptionStepOne.FrecuenciaPago, subscriptionStepOne.TipoAfiliacion)
+	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento,fecha_nacimiento, telefono, tipo, tc_datos, idplan, frecuencia_pago, tipo_afiliacion) values(?,?,STR_TO_DATE(? ,'%d-%m-%Y'),?,?,?,?,?,?)", subscriptionStepOne.TypeDoc, subscriptionStepOne.NumDoc, subscriptionStepOne.FechaNacimiento, subscriptionStepOne.CelNumber, subscriptionStepOne.Type, subscriptionStepOne.TcDatos, subscriptionStepOne.IdPlan, subscriptionStepOne.FrecuenciaPago, subscriptionStepOne.TipoAfiliacion)
 	subscriptionDao.Db.Close()
 	if err != nil {
 		return err
@@ -34,7 +34,7 @@ func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entite
 }
 
 func (subscriptionDao SubscriptionDao) Update(subscriptionStepTwo entites.SubscriptionStepTwo) (int64, error) {
-	result, err := subscriptionDao.Db.Exec("UPDATE asegurado_suscripcion SET idtipodocumento = ?, nro_documento = ?, nombre1 = ?, nombre2 = ?, apellido_parteno = ?, apellido_materno = ?, correo = ? WHERE idasegurado_suscripcion = ?", subscriptionStepTwo.TypeDoc, subscriptionStepTwo.NumDoc, subscriptionStepTwo.Nom1, subscriptionStepTwo.Nom2, subscriptionStepTwo.Ape1, subscriptionStepTwo.Ape2, subscriptionStepTwo.Mail, subscriptionStepTwo.Id)
+	result, err := subscriptionDao.Db.Exec("UPDATE asegurado_suscripcion SET nombre1 = ?, nombre2 = ?, apellido_parteno = ?, apellido_materno = ?, correo = ? WHERE idasegurado_suscripcion = ?", subscriptionStepTwo.Nom1, subscriptionStepTwo.Nom2, subscriptionStepTwo.Ape1, subscriptionStepTwo.Ape2, subscriptionStepTwo.Mail, subscriptionStepTwo.Id)
 	subscriptionDao.Db.Close()
 	if err != nil {
 		return 0, err
@@ -92,5 +92,16 @@ func (subscriptionDao SubscriptionDao) UpdateDeclaration(subscriptionStepThree e
 		return 0, err
 	} else {
 		return result.RowsAffected()
+	}
+}
+
+func (subscriptionDao SubscriptionDao) CreateQuestionDetail(questionDetail *entites.SubsQuestions) error {
+	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscription(idasegurado_suscripcion,pregunta,descripcion) values(?,?,?)", questionDetail.IdSubscription, questionDetail.Question, questionDetail.Description)
+	subscriptionDao.Db.Close()
+	if err != nil {
+		return err
+	} else {
+		questionDetail.IdQuestion, err = result.LastInsertId()
+		return nil
 	}
 }

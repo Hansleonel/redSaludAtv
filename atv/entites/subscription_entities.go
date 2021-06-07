@@ -27,6 +27,8 @@ type Subscription struct {
 type SubscriptionStepOne struct {
 	Id              int64  `json:"id"`
 	FechaNacimiento string `json:"fechaNacimiento"`
+	TypeDoc         string `json:"type_doc"`
+	NumDoc          string `json:"numDoc"`
 	CelNumber       string `json:"celNumber"`
 	Type            int    `json:"type"`
 	TcDatos         string `json:"tcDatos"`
@@ -36,14 +38,12 @@ type SubscriptionStepOne struct {
 }
 
 type SubscriptionStepTwo struct {
-	Id      int64  `json:"subscription_id"`
-	TypeDoc int8   `json:"subscription_typeDoc"`
-	NumDoc  string `json:"subscription_numDoc"`
-	Ape1    string `json:"subscription_ape1"`
-	Ape2    string `json:"subscription_ape2"`
-	Nom1    string `json:"subscription_nom1"`
-	Nom2    string `json:"subscription_nom2"`
-	Mail    string `json:"subscription_mail"`
+	Id   int64  `json:"subscription_id"`
+	Ape1 string `json:"subscription_ape1"`
+	Ape2 string `json:"subscription_ape2"`
+	Nom1 string `json:"subscription_nom1"`
+	Nom2 string `json:"subscription_nom2"`
+	Mail string `json:"subscription_mail"`
 }
 
 type SubscriptionStepThree struct {
@@ -52,6 +52,13 @@ type SubscriptionStepThree struct {
 	QuestionFirst  string `json:"question_01"`
 	QuestionSecond string `json:"question_02"`
 	QuestionThird  string `json:"question_03"`
+}
+
+type SubsQuestions struct {
+	IdQuestion     int64  `json:"id"`
+	IdSubscription int64  `json:"id_subscription"`
+	Question       string `json:"question"`
+	Description    string `json:"description"`
 }
 
 type SubsError struct {
