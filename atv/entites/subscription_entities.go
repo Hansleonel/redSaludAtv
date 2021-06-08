@@ -25,26 +25,26 @@ type Subscription struct {
 }
 
 type SubscriptionStepOne struct {
-	Id              int64  `json:"id"`
-	FechaNacimiento string `json:"fechaNacimiento"`
-	TypeDoc         int8   `json:"type_doc"`
-	NumDoc          string `json:"num_doc"`
-	CelNumber       string `json:"celNumber"`
-	Type            int    `json:"type"`
-	TcDatos         string `json:"tcDatos"`
-	IdPlan          int64  `json:"idPlan"`
-	FrecuenciaPago  int8   `json:"frecuenciaPago"`
-	TipoAfiliacion  int8   `json:"tipoAfiliacion"`
+	Id             int64  `json:"id"`
+	TypeDoc        int8   `json:"type_doc"`
+	NumDoc         string `json:"num_doc"`
+	CelNumber      string `json:"celNumber"`
+	Type           int    `json:"type"`
+	TcDatos        string `json:"tcDatos"`
+	IdPlan         int64  `json:"idPlan"`
+	FrecuenciaPago int8   `json:"frecuenciaPago"`
+	TipoAfiliacion int8   `json:"tipoAfiliacion"`
 }
 
 type SubscriptionStepTwo struct {
-	Id            int64  `json:"subscription_id"`
-	Ape1          string `json:"subscription_ape1"`
-	Ape2          string `json:"subscription_ape2"`
-	Nom1          string `json:"subscription_nom1"`
-	Nom2          string `json:"subscription_nom2"`
-	Mail          string `json:"subscription_mail"`
-	IdContratante string `json:"id_contratante"`
+	Id              int64  `json:"subscription_id"`
+	FechaNacimiento string `json:"fecha_nacimiento"`
+	Ape1            string `json:"subscription_ape1"`
+	Ape2            string `json:"subscription_ape2"`
+	Nom1            string `json:"subscription_nom1"`
+	Nom2            string `json:"subscription_nom2"`
+	Mail            string `json:"subscription_mail"`
+	IdContratante   string `json:"id_contratante"`
 }
 
 type SubscriptionStepThree struct {

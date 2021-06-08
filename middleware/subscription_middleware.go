@@ -69,7 +69,7 @@ func CreateSubscriptionStepOne(w http.ResponseWriter, r *http.Request) {
 			Db: db,
 		}
 
-		if subscriptionStepOne.NumDoc == "" || subscriptionStepOne.FechaNacimiento == "" || subscriptionStepOne.CelNumber == "" || subscriptionStepOne.TcDatos == "" {
+		if subscriptionStepOne.NumDoc == "" || subscriptionStepOne.CelNumber == "" || subscriptionStepOne.TcDatos == "" {
 			requestError := entites.SubsError{
 				Type:   "/api/atv/subscription/stepOne",
 				Title:  "Error 400",
@@ -144,7 +144,7 @@ func UpdateSubscription(w http.ResponseWriter, r *http.Request) {
 			Db: db,
 		}
 
-		if subscriptionStepTwo.Ape1 == "" || subscriptionStepTwo.Ape2 == "" || subscriptionStepTwo.Nom1 == "" || subscriptionStepTwo.Nom2 == "" || subscriptionStepTwo.Mail == "" {
+		if subscriptionStepTwo.FechaNacimiento == "" || subscriptionStepTwo.Ape1 == "" || subscriptionStepTwo.Ape2 == "" || subscriptionStepTwo.Nom1 == "" || subscriptionStepTwo.Nom2 == "" || subscriptionStepTwo.Mail == "" {
 			requestError := entites.SubsError{
 				Type:   "/api/atv/subscription/stepTwo",
 				Title:  "Error 400",
