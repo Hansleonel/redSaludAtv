@@ -34,7 +34,7 @@ func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entite
 }
 
 func (subscriptionDao SubscriptionDao) Update(subscriptionStepTwo entites.SubscriptionStepTwo) (int64, error) {
-	result, err := subscriptionDao.Db.Exec("UPDATE asegurado_suscripcion SET nombre1 = ?, nombre2 = ?, apellido_parteno = ?, apellido_materno = ?, correo = ? WHERE idasegurado_suscripcion = ?", subscriptionStepTwo.Nom1, subscriptionStepTwo.Nom2, subscriptionStepTwo.Ape1, subscriptionStepTwo.Ape2, subscriptionStepTwo.Mail, subscriptionStepTwo.Id)
+	result, err := subscriptionDao.Db.Exec("UPDATE asegurado_suscripcion SET nombre1 = ?, nombre2 = ?, apellido_parteno = ?, apellido_materno = ?, correo = ?, idcontratante = ? WHERE idasegurado_suscripcion = ?", subscriptionStepTwo.Nom1, subscriptionStepTwo.Nom2, subscriptionStepTwo.Ape1, subscriptionStepTwo.Ape2, subscriptionStepTwo.Mail, subscriptionStepTwo.Id, subscriptionStepTwo.IdContratante)
 	subscriptionDao.Db.Close()
 	if err != nil {
 		return 0, err
@@ -96,7 +96,7 @@ func (subscriptionDao SubscriptionDao) UpdateDeclaration(subscriptionStepThree e
 }
 
 func (subscriptionDao SubscriptionDao) CreateQuestionDetail(questionDetail *entites.SubsQuestions) error {
-	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscription(idasegurado_suscripcion,pregunta,descripcion) values(?,?,?)", questionDetail.IdSubscription, questionDetail.Question, questionDetail.Description)
+	result, err := subscriptionDao.Db.Exec("INSERT INTO suscripcion_detalle(idasegurado_suscripcion, pregunta, descripcion) values(?,?,?)", questionDetail.IdSubscription, questionDetail.Question, questionDetail.Description)
 	subscriptionDao.Db.Close()
 	if err != nil {
 		return err
