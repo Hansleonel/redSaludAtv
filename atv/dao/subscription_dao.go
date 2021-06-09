@@ -33,8 +33,13 @@ func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entite
 	}
 }
 
+func (subscriptionDao SubscriptionDao) CreateFamiliar(subscriptionFamiliar *entites.SubsFamiliar) {
+	// result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento, tipo, tc_datos, idplan, frecuencia_pago, tipo_Afiliacion, fecha_nacimiento, nombre1, nombre2, apellido_paterno, apellido_materno, idcontratante) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", subscriptionFamiliar.TypeDoc, subscriptionFamiliar.NumDoc,)
+
+}
+
 func (subscriptionDao SubscriptionDao) Update(subscriptionStepTwo entites.SubscriptionStepTwo) (int64, error) {
-	result, err := subscriptionDao.Db.Exec("UPDATE asegurado_suscripcion SET fecha_nacimiento = ?, nombre1 = ?, nombre2 = ?, apellido_parteno = ?, apellido_materno = ?, correo = ?, idcontratante = ? WHERE idasegurado_suscripcion = ?", subscriptionStepTwo.FechaNacimiento, subscriptionStepTwo.Nom1, subscriptionStepTwo.Nom2, subscriptionStepTwo.Ape1, subscriptionStepTwo.Ape2, subscriptionStepTwo.Mail, subscriptionStepTwo.IdContratante, subscriptionStepTwo.Id)
+	result, err := subscriptionDao.Db.Exec("UPDATE asegurado_suscripcion SET fecha_nacimiento = ?, nombre1 = ?, nombre2 = ?, apellido_paterno = ?, apellido_materno = ?, correo = ?, idcontratante = ? WHERE idasegurado_suscripcion = ?", subscriptionStepTwo.FechaNacimiento, subscriptionStepTwo.Nom1, subscriptionStepTwo.Nom2, subscriptionStepTwo.Ape1, subscriptionStepTwo.Ape2, subscriptionStepTwo.Mail, subscriptionStepTwo.IdContratante, subscriptionStepTwo.Id)
 	subscriptionDao.Db.Close()
 	if err != nil {
 		return 0, err

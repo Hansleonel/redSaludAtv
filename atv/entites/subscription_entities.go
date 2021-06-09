@@ -67,3 +67,20 @@ type SubsError struct {
 	Title  string `json:"title"`
 	Detail string `json:"detail"`
 }
+
+type SubsFamiliar struct {
+	Id             int64  `json:"id"`
+	TypeDoc        int8   `json:"type_doc"`
+	NumDoc         string `json:"num_doc"`
+	Type           int    `json:"type"`
+	TcDatos        string `json:"tcDatos"`
+	IdPlan         int64  `json:"idPlan"`
+	FrecuenciaPago int8   `json:"frecuenciaPago"`
+	TipoAfiliacion int8   `json:"tipoAfiliacion"`
+	FechaNacimiento string `json:"fecha_nacimiento"`
+	Ape1            string `json:"subscription_ape1"`
+	Ape2            string `json:"subscription_ape2"`
+	Nom1            string `json:"subscription_nom1"`
+	Nom2            string `json:"subscription_nom2"`
+	IdContratante   string `json:"id_contratante"`
+}
