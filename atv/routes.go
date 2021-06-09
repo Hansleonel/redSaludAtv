@@ -16,5 +16,5 @@ func Routes(r *mux.Router) {
 	r.HandleFunc("/api/atv/subscription/validationSubscription", middleware.PostValidationPerson).Methods("POST")
 	r.HandleFunc("/api/atv/subscription/stepThree", middleware.UpdateDeclaration).Methods("PUT")
 
-	r.HandleFunc("/api/atv/person", middleware.PostDataPerson).Methods("POST")
+	r.HandleFunc("/api/atv/person", middleware.GetDataPerson).Methods("POST")
 }

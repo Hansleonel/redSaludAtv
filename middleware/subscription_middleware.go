@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 )
 
 func CreateSubscription(w http.ResponseWriter, r *http.Request) {
@@ -186,8 +187,15 @@ func GetSubscriptions(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostDataPerson(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-type", "application/json")
-	w.Header().Set("Authorization", "Bearer 2300ffa8c8403056fe54a11a4ce463845c47b9d156d1642ed8b1311fe9f6f577")
+	TOKEN := "2300ffa8c8403056fe54a11a4ce463845c47b9d156d1642ed8b1311fe9f6f577"
+
+	w.Header().Add("Content-Type", "application/json")
+	w.Header().Add("Authorization", "Bearer "+TOKEN)
+
+	// r.Header.Add("Content-Type","")
+
+	fmt.Println(TOKEN)
+	fmt.Println(w.Header())
 
 	var dataQuery entites.DataQuery
 	_ = json.NewDecoder(r.Body).Decode(&dataQuery)
@@ -196,6 +204,9 @@ func PostDataPerson(w http.ResponseWriter, r *http.Request) {
 
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	response, err := http.Get("https://consulta.apiperu.pe/api/dni/" + dataQuery.DniQuery)
+
+	fmt.Println(response)
+
 	if err != nil {
 		fmt.Println(err.Error())
 	} else {
@@ -214,6 +225,54 @@ func PostDataPerson(w http.ResponseWriter, r *http.Request) {
 			utils.RespondWithSuccess(responsePerson.Data, w)
 		}
 	}
+}
+
+func GetDataPerson(w http.ResponseWriter, r *http.Request) {
+
+	w.Header().Add("Content-Type", "application/json")
+
+	var dataQuery entites.DataQuery
+	_ = json.NewDecoder(r.Body).Decode(&dataQuery)
+
+	reqURL, _ := url.Parse("https://consulta.apiperu.pe/api/dni/" + dataQuery.DniQuery)
+
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+
+	req := &http.Request{
+		Method: "GET",
+		URL:    reqURL,
+		Header: map[string][]string{
+			"Content-Type":  {"application/json"},
+			"Authorization": {"Bearer 2300ffa8c8403056fe54a11a4ce463845c47b9d156d1642ed8b1311fe9f6f577"},
+		},
+	}
+
+	res, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+
+		log.Fatal("Error", err)
+
+	} else {
+
+		responseData, err := ioutil.ReadAll(res.Body)
+
+		if err != nil {
+
+			log.Fatal(err)
+
+		} else {
+
+			var responsePerson entites.PersonReniec
+			json.Unmarshal(responseData, &responsePerson)
+
+			fmt.Println(responsePerson.Data)
+
+			utils.RespondWithSuccess(responsePerson.Data, w)
+
+		}
+	}
+
 }
 
 func PostValidationPerson(w http.ResponseWriter, r *http.Request) {
