@@ -26,6 +26,7 @@ func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entite
 	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento, telefono, tipo, tc_datos, idplan, frecuencia_pago, tipo_afiliacion) values(?,?,?,?,?,?,?,?)", subscriptionStepOne.TypeDoc, subscriptionStepOne.NumDoc, subscriptionStepOne.CelNumber, subscriptionStepOne.Type, subscriptionStepOne.TcDatos, subscriptionStepOne.IdPlan, subscriptionStepOne.FrecuenciaPago, subscriptionStepOne.TipoAfiliacion)
 	subscriptionDao.Db.Close()
 	if err != nil {
+		fmt.Println(err)
 		return err
 	} else {
 		subscriptionStepOne.Id, err = result.LastInsertId()
@@ -33,9 +34,16 @@ func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entite
 	}
 }
 
-func (subscriptionDao SubscriptionDao) CreateFamiliar(subscriptionFamiliar *entites.SubsFamiliar) {
-	// result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento, tipo, tc_datos, idplan, frecuencia_pago, tipo_Afiliacion, fecha_nacimiento, nombre1, nombre2, apellido_paterno, apellido_materno, idcontratante) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", subscriptionFamiliar.TypeDoc, subscriptionFamiliar.NumDoc,)
-
+func (subscriptionDao SubscriptionDao) CreateFamiliar(subscriptionFamiliar *entites.SubsFamiliar) error {
+	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento, tipo, tc_datos, idplan, frecuencia_pago, tipo_Afiliacion, fecha_nacimiento, nombre1, nombre2, apellido_paterno, apellido_materno, idcontratante) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", subscriptionFamiliar.TypeDoc, subscriptionFamiliar.NumDoc, subscriptionFamiliar.Type, subscriptionFamiliar.TcDatos, subscriptionFamiliar.IdPlan, subscriptionFamiliar.FrecuenciaPago, subscriptionFamiliar.TipoAfiliacion, subscriptionFamiliar.FechaNacimiento, subscriptionFamiliar.Nom1, subscriptionFamiliar.Nom2, subscriptionFamiliar.Ape1, subscriptionFamiliar.Ape2, subscriptionFamiliar.IdContratante)
+	subscriptionDao.Db.Close()
+	if err != nil {
+		fmt.Println(err)
+		return err
+	} else {
+		subscriptionFamiliar.Id, err = result.LastInsertId()
+		return nil
+	}
 }
 
 func (subscriptionDao SubscriptionDao) Update(subscriptionStepTwo entites.SubscriptionStepTwo) (int64, error) {

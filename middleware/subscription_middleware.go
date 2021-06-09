@@ -94,6 +94,44 @@ func CreateSubscriptionStepOne(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func CreateSubscriptionFamiliar(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+	var subscriptionFamiliar entites.SubsFamiliar
+	_ = json.NewDecoder(r.Body).Decode(&subscriptionFamiliar)
+
+	db, err := config.GetMySQLDB()
+
+	if err != nil {
+		fmt.Println()
+	} else {
+		subscriptionDao := dao.SubscriptionDao{
+			Db: db,
+		}
+
+		if subscriptionFamiliar.NumDoc == "" || subscriptionFamiliar.TcDatos == "" || subscriptionFamiliar.FechaNacimiento == "" || subscriptionFamiliar.Ape1 == "" || subscriptionFamiliar.Ape2 == "" || subscriptionFamiliar.Nom1 == "" || subscriptionFamiliar.Nom2 == "" || subscriptionFamiliar.IdContratante == "" {
+			requestError := entites.SubsError{
+				Type:   "/api/atv/subscription/createFamiliar",
+				Title:  "Error 400",
+				Detail: "Bad Request, values required",
+			}
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(requestError)
+			return
+		}
+
+		err := subscriptionDao.CreateFamiliar(&subscriptionFamiliar)
+
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(err)
+		} else {
+			w.WriteHeader(http.StatusCreated)
+			json.NewEncoder(w).Encode(subscriptionFamiliar)
+		}
+	}
+
+}
+
 func CreateQuestionDetail(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	var questionDetail entites.SubsQuestions
