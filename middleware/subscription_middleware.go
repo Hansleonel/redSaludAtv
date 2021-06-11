@@ -272,6 +272,17 @@ func GetDataPerson(w http.ResponseWriter, r *http.Request) {
 	var dataQuery entites.DataQuery
 	_ = json.NewDecoder(r.Body).Decode(&dataQuery)
 
+	if len(dataQuery.DniQuery) < 8 {
+		requestError := entites.SubsError{
+			Type:   "/api/atv/dni",
+			Title:  "Error 400",
+			Detail: "Bad Request, length of query must have just 8 digits",
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(requestError)
+		return
+	}
+
 	reqURL, _ := url.Parse("https://consulta.apiperu.pe/api/dni/" + dataQuery.DniQuery)
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	req := &http.Request{
@@ -315,6 +326,17 @@ func GetDataEnterprise(w http.ResponseWriter, r *http.Request) {
 
 	var dataQueryRuc entites.DataQueryRuc
 	_ = json.NewDecoder(r.Body).Decode(&dataQueryRuc)
+
+	if len(dataQueryRuc.RucQuery) < 11 {
+		requestError := entites.SubsError{
+			Type:   "/api/atv/ruc",
+			Title:  "Error 400",
+			Detail: "Bad Request, length of query must have just 11 digits",
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(requestError)
+		return
+	}
 
 	reqURL, _ := url.Parse("https://consulta.apiperu.pe/api/ruc/" + dataQueryRuc.RucQuery)
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
