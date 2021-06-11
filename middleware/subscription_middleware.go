@@ -273,9 +273,7 @@ func GetDataPerson(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewDecoder(r.Body).Decode(&dataQuery)
 
 	reqURL, _ := url.Parse("https://consulta.apiperu.pe/api/dni/" + dataQuery.DniQuery)
-
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
-
 	req := &http.Request{
 		Method: "GET",
 		URL:    reqURL,
@@ -309,6 +307,50 @@ func GetDataPerson(w http.ResponseWriter, r *http.Request) {
 			utils.RespondWithSuccess(responsePerson.Data, w)
 
 		}
+	}
+}
+
+func GetDataEnterprise(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-type", "application/json")
+
+	var dataQueryRuc entites.DataQueryRuc
+	_ = json.NewDecoder(r.Body).Decode(&dataQueryRuc)
+
+	reqURL, _ := url.Parse("https://consulta.apiperu.pe/api/ruc/" + dataQueryRuc.RucQuery)
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	req := &http.Request{
+		Method: "GET",
+		URL:    reqURL,
+		Header: map[string][]string{
+			"Content-Type":  {"application/json"},
+			"Authorization": {"Bearer 2300ffa8c8403056fe54a11a4ce463845c47b9d156d1642ed8b1311fe9f6f577"},
+		},
+	}
+
+	res, err := http.DefaultClient.Do(req)
+
+	if err != nil {
+
+		log.Fatal("Error", err)
+
+	} else {
+
+		responseData, err := ioutil.ReadAll(res.Body)
+
+		if err != nil {
+
+			log.Fatal(err)
+
+		} else {
+
+			var responseEnterprise entites.EnterpriseSunat
+			json.Unmarshal(responseData, &responseEnterprise)
+
+			fmt.Println(responseEnterprise.Data)
+
+			utils.RespondWithSuccess(responseEnterprise.Data, w)
+		}
+
 	}
 
 }
