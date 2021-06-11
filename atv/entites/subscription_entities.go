@@ -25,15 +25,16 @@ type Subscription struct {
 }
 
 type SubscriptionStepOne struct {
-	Id             int64  `json:"id"`
-	TypeDoc        int8   `json:"type_doc"`
-	NumDoc         string `json:"num_doc"`
-	CelNumber      string `json:"celNumber"`
-	Type           int    `json:"type"`
-	TcDatos        string `json:"tcDatos"`
-	IdPlan         int64  `json:"idPlan"`
-	FrecuenciaPago int8   `json:"frecuenciaPago"`
-	TipoAfiliacion int8   `json:"tipoAfiliacion"`
+	Id             int64   `json:"id"`
+	TypeDoc        int8    `json:"type_doc"`
+	NumDoc         string  `json:"num_doc"`
+	CelNumber      string  `json:"celNumber"`
+	Type           int     `json:"type"`
+	TcDatos        string  `json:"tcDatos"`
+	IdPlan         int64   `json:"idPlan"`
+	FrecuenciaPago int8    `json:"frecuenciaPago"`
+	TipoAfiliacion int8    `json:"tipoAfiliacion"`
+	Importe        float64 `json:"importe"`
 }
 
 type SubscriptionStepTwo struct {
@@ -83,4 +84,5 @@ type SubsFamiliar struct {
 	Nom1            string `json:"nom1"`
 	Nom2            string `json:"nom2"`
 	IdContratante   string `json:"id_contratante"`
+	Importe        float64 `json:"importe"`
 }

@@ -23,7 +23,7 @@ func (subscriptionDao SubscriptionDao) Create(subscription *entites.Subscription
 }
 
 func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entites.SubscriptionStepOne) error {
-	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento, telefono, tipo, tc_datos, idplan, frecuencia_pago, tipo_afiliacion) values(?,?,?,?,?,?,?,?)", subscriptionStepOne.TypeDoc, subscriptionStepOne.NumDoc, subscriptionStepOne.CelNumber, subscriptionStepOne.Type, subscriptionStepOne.TcDatos, subscriptionStepOne.IdPlan, subscriptionStepOne.FrecuenciaPago, subscriptionStepOne.TipoAfiliacion)
+	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento, telefono, tipo, tc_datos, idplan, frecuencia_pago, tipo_afiliacion, importe) values(?,?,?,?,?,?,?,?,?)", subscriptionStepOne.TypeDoc, subscriptionStepOne.NumDoc, subscriptionStepOne.CelNumber, subscriptionStepOne.Type, subscriptionStepOne.TcDatos, subscriptionStepOne.IdPlan, subscriptionStepOne.FrecuenciaPago, subscriptionStepOne.TipoAfiliacion, subscriptionStepOne.Importe)
 	subscriptionDao.Db.Close()
 	if err != nil {
 		fmt.Println(err)

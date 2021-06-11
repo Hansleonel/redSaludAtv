@@ -70,7 +70,7 @@ func CreateSubscriptionStepOne(w http.ResponseWriter, r *http.Request) {
 			Db: db,
 		}
 
-		if subscriptionStepOne.NumDoc == "" || subscriptionStepOne.CelNumber == "" || subscriptionStepOne.TcDatos == "" {
+		if subscriptionStepOne.Importe <= 0.0 || subscriptionStepOne.NumDoc == "" || subscriptionStepOne.CelNumber == "" || subscriptionStepOne.TcDatos == "" {
 			requestError := entites.SubsError{
 				Type:   "/api/atv/subscription/stepOne",
 				Title:  "Error 400",
