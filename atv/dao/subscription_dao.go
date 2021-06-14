@@ -118,3 +118,17 @@ func (subscriptionDao SubscriptionDao) CreateQuestionDetail(questionDetail *enti
 		return nil
 	}
 }
+
+func (subscriptionDao SubscriptionDao) CreateDeclaration(questions []entites.SubsDeclaration) error {
+	for i := 0; i < len(questions); i++ {
+		result, err := subscriptionDao.Db.Exec("INSERT INTO suscripcion_detalle(idasegurado_suscripcion, pregunta, descripcion) VALUES (?,?,?)", questions[i].IdSubscription, questions[i].Question, questions[i].Description)
+		if err != nil {
+			return err
+		} else {
+			questions[i].Id, err = result.LastInsertId()
+		}
+	}
+	subscriptionDao.Db.Close()
+
+	return nil
+}

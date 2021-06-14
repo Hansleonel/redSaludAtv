@@ -170,6 +170,31 @@ func CreateQuestionDetail(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func CreateDeclaration(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json")
+	var questions entites.RequestSubsDeclaration
+	err := json.NewDecoder(r.Body).Decode(&questions)
+
+	db, err2 := config.GetMySQLDB()
+
+	if err != nil && err2 != nil {
+		utils.RespondWithError(err2, w)
+	} else {
+		subscriptionDao := dao.SubscriptionDao{
+			Db: db,
+		}
+
+		err := subscriptionDao.CreateDeclaration(questions.Data)
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(err)
+		} else {
+			w.WriteHeader(http.StatusCreated)
+			json.NewEncoder(w).Encode(questions)
+		}
+	}
+}
+
 func UpdateSubscription(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
 	var subscriptionStepTwo entites.SubscriptionStepTwo

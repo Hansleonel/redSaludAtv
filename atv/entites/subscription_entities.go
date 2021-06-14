@@ -70,19 +70,30 @@ type SubsError struct {
 }
 
 type SubsFamiliar struct {
-	Id              int64  `json:"id"`
-	TypeDoc         int8   `json:"type_doc"`
-	NumDoc          string `json:"num_doc"`
-	Type            int    `json:"type"`
-	TcDatos         string `json:"tcDatos"`
-	IdPlan          int64  `json:"idPlan"`
-	FrecuenciaPago  int8   `json:"frecuenciaPago"`
-	TipoAfiliacion  int8   `json:"tipoAfiliacion"`
-	FechaNacimiento string `json:"fecha_nacimiento"`
-	Ape1            string `json:"ape1"`
-	Ape2            string `json:"ape2"`
-	Nom1            string `json:"nom1"`
-	Nom2            string `json:"nom2"`
-	IdContratante   string `json:"id_contratante"`
-	Importe        float64 `json:"importe"`
+	Id              int64   `json:"id"`
+	TypeDoc         int8    `json:"type_doc"`
+	NumDoc          string  `json:"num_doc"`
+	Type            int     `json:"type"`
+	TcDatos         string  `json:"tcDatos"`
+	IdPlan          int64   `json:"idPlan"`
+	FrecuenciaPago  int8    `json:"frecuenciaPago"`
+	TipoAfiliacion  int8    `json:"tipoAfiliacion"`
+	FechaNacimiento string  `json:"fecha_nacimiento"`
+	Ape1            string  `json:"ape1"`
+	Ape2            string  `json:"ape2"`
+	Nom1            string  `json:"nom1"`
+	Nom2            string  `json:"nom2"`
+	IdContratante   string  `json:"id_contratante"`
+	Importe         float64 `json:"importe"`
+}
+
+type RequestSubsDeclaration struct {
+	Data []SubsDeclaration `json:"data"`
+}
+
+type SubsDeclaration struct {
+	Id             int64  `json:"id"`
+	IdSubscription int64  `json:"idSubscription"`
+	Question       string `json:"question"`
+	Description    string `json:"description"`
 }
