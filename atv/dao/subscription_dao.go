@@ -23,7 +23,7 @@ func (subscriptionDao SubscriptionDao) Create(subscription *entites.Subscription
 }
 
 func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entites.SubscriptionStepOne) error {
-	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento, telefono, tipo, tc_datos, idplan, frecuencia_pago, tipo_afiliacion, importe) values(?,?,?,?,?,?,?,?,?)", subscriptionStepOne.TypeDoc, subscriptionStepOne.NumDoc, subscriptionStepOne.CelNumber, subscriptionStepOne.Type, subscriptionStepOne.TcDatos, subscriptionStepOne.IdPlan, subscriptionStepOne.FrecuenciaPago, subscriptionStepOne.TipoAfiliacion, subscriptionStepOne.Importe)
+	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento, telefono, tipo, tc_datos, idplan, frecuencia_pago, tipo_afiliacion, importe, sexo) values(?,?,?,?,?,?,?,?,?,?)", subscriptionStepOne.TypeDoc, subscriptionStepOne.NumDoc, subscriptionStepOne.CelNumber, subscriptionStepOne.Type, subscriptionStepOne.TcDatos, subscriptionStepOne.IdPlan, subscriptionStepOne.FrecuenciaPago, subscriptionStepOne.TipoAfiliacion, subscriptionStepOne.Importe, subscriptionStepOne.Sexo)
 	subscriptionDao.Db.Close()
 	if err != nil {
 		fmt.Println(err)
@@ -35,7 +35,7 @@ func (subscriptionDao SubscriptionDao) CreateStepOne(subscriptionStepOne *entite
 }
 
 func (subscriptionDao SubscriptionDao) CreateFamiliar(subscriptionFamiliar *entites.SubsFamiliar) error {
-	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento, tipo, tc_datos, idplan, frecuencia_pago, tipo_Afiliacion, fecha_nacimiento, nombre1, nombre2, apellido_paterno, apellido_materno, idcontratante) values (?,?,?,?,?,?,?,?,?,?,?,?,?)", subscriptionFamiliar.TypeDoc, subscriptionFamiliar.NumDoc, subscriptionFamiliar.Type, subscriptionFamiliar.TcDatos, subscriptionFamiliar.IdPlan, subscriptionFamiliar.FrecuenciaPago, subscriptionFamiliar.TipoAfiliacion, subscriptionFamiliar.FechaNacimiento, subscriptionFamiliar.Nom1, subscriptionFamiliar.Nom2, subscriptionFamiliar.Ape1, subscriptionFamiliar.Ape2, subscriptionFamiliar.IdContratante)
+	result, err := subscriptionDao.Db.Exec("INSERT INTO asegurado_suscripcion(idtipodocumento, nro_documento, tipo, tc_datos, idplan, frecuencia_pago, tipo_Afiliacion, fecha_nacimiento, nombre1, nombre2, apellido_paterno, apellido_materno, idcontratante, importe) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)", subscriptionFamiliar.TypeDoc, subscriptionFamiliar.NumDoc, subscriptionFamiliar.Type, subscriptionFamiliar.TcDatos, subscriptionFamiliar.IdPlan, subscriptionFamiliar.FrecuenciaPago, subscriptionFamiliar.TipoAfiliacion, subscriptionFamiliar.FechaNacimiento, subscriptionFamiliar.Nom1, subscriptionFamiliar.Nom2, subscriptionFamiliar.Ape1, subscriptionFamiliar.Ape2, subscriptionFamiliar.IdContratante, subscriptionFamiliar.Importe)
 	subscriptionDao.Db.Close()
 	if err != nil {
 		fmt.Println(err)
