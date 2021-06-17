@@ -340,6 +340,17 @@ func GetDataPerson(w http.ResponseWriter, r *http.Request) {
 
 			fmt.Println(responsePerson.Data)
 
+			if responsePerson.Data.ApellidoPaterno == "" {
+				requestError := entites.SubsError{
+					Type:   "/api/atv/dni",
+					Title:  "Error 404",
+					Detail: "Bad Request,dni not found",
+				}
+				w.WriteHeader(http.StatusNotFound)
+				json.NewEncoder(w).Encode(requestError)
+				return
+			}
+
 			utils.RespondWithSuccess(responsePerson.Data, w)
 
 		}
