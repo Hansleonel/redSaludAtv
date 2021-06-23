@@ -404,7 +404,9 @@ func GetDataEnterprise(w http.ResponseWriter, r *http.Request) {
 			var responseEnterprise entites.EnterpriseSunat
 			json.Unmarshal(responseData, &responseEnterprise)
 
+			// fmt.Println(responseEnterprise)
 			fmt.Println(responseEnterprise.Data)
+			// fmt.Println("UBIGEO",responseEnterprise.Data.Ubigeo)
 
 			utils.RespondWithSuccess(responseEnterprise.Data, w)
 		}

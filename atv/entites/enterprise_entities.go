@@ -6,11 +6,12 @@ type EnterpriseSunat struct {
 }
 
 type DataEnterprise struct {
-	Ruc         string `json:"ruc"`
-	RazonSocial string `json:"nombre_o_razon_social"`
-	Condicion   string `json:"condicion"`
-	Estado      string `json:"estado"`
-	Direccion   string `json:"direccion_completa"`
+	Ruc         string   `json:"ruc"`
+	RazonSocial string   `json:"nombre_o_razon_social"`
+	Condicion   string   `json:"condicion"`
+	Estado      string   `json:"estado"`
+	Direccion   string   `json:"direccion_completa"`
+	Ubigeo      []string `json:"ubigeo"`
 }
 
 type DataQueryRuc struct {
