@@ -208,7 +208,7 @@ func UpdateSubscription(w http.ResponseWriter, r *http.Request) {
 			Db: db,
 		}
 
-		if subscriptionStepTwo.FechaNacimiento == "" || subscriptionStepTwo.Ape1 == "" || subscriptionStepTwo.Ape2 == "" || subscriptionStepTwo.Nom1 == "" || subscriptionStepTwo.Nom2 == "" || subscriptionStepTwo.Mail == "" {
+		if subscriptionStepTwo.Nationality == "" || subscriptionStepTwo.Sex == "" || subscriptionStepTwo.FechaNacimiento == "" || subscriptionStepTwo.Ape1 == "" || subscriptionStepTwo.Ape2 == "" || subscriptionStepTwo.Nom1 == "" || subscriptionStepTwo.Nom2 == "" || subscriptionStepTwo.Mail == "" {
 			requestError := entites.SubsError{
 				Type:   "/api/atv/subscription/stepTwo",
 				Title:  "Error 400",

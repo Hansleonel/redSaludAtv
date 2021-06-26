@@ -35,7 +35,6 @@ type SubscriptionStepOne struct {
 	FrecuenciaPago int8    `json:"frecuenciaPago"`
 	TipoAfiliacion int8    `json:"tipoAfiliacion"`
 	Importe        float64 `json:"importe"`
-	Sexo           string  `json:"sexo"`
 }
 
 type SubscriptionStepTwo struct {
@@ -47,6 +46,8 @@ type SubscriptionStepTwo struct {
 	Nom2            string `json:"subscription_nom2"`
 	Mail            string `json:"subscription_mail"`
 	IdContratante   string `json:"id_contratante"`
+	Sex             string `json:"sex"`
+	Nationality     string `json:"nationality"`
 }
 
 type SubscriptionStepThree struct {
