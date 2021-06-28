@@ -1,6 +1,6 @@
 package payments
 
-type cardPayU struct {
+type CardPayU struct {
 	Name     string `json:"name"`
 	Document string `json:"document"`
 	Number   string `json:"number"`
@@ -19,4 +19,8 @@ type Address struct {
 	State      string `json:"state"`
 	Country    string `json:"country"`
 	Phone      string `json:"phone"`
+}
+
+type CardPayUResponse struct {
+	Token string `json:"token"`
 }
