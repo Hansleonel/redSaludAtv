@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"RedSaludAtv/atv/entites/payments"
+	"bytes"
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
@@ -14,14 +15,17 @@ import (
 func CreatePlan(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-type", "application/json")
 
-	/* var validationDni entites.ValidationPerson
-	_ = json.NewDecoder(r.Body).Decode(&validationDni)
+	var clientPayU payments.ClientPayU
+	_ = json.NewDecoder(r.Body).Decode(&clientPayU)
 
-	var clientRequest payments.ClientPayU
+	requestByte, _ := json.Marshal(clientPayU)
+	requestReader := bytes.NewReader(requestByte)
+
+	/* var clientRequest payments.ClientPayU
 	clientRequest.Email =  validationDni.DniValidation
 	*/
 
-	reqBody := ioutil.NopCloser(r.Body)
+	reqBody := ioutil.NopCloser(requestReader)
 
 	reqURL, _ := url.Parse("https://api.payulatam.com/payments-api/rest/v4.9/customers")
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}

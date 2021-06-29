@@ -20,5 +20,6 @@ func Routes(r *mux.Router) {
 
 	r.HandleFunc("/api/atv/dni", middleware.GetDataPerson).Methods("POST")
 	r.HandleFunc("/api/atv/ruc", middleware.GetDataEnterprise).Methods("POST")
+
 	r.HandleFunc("/api/atv/payment/client", middleware.CreatePlan).Methods("POST")
 }
