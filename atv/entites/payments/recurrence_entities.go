@@ -4,6 +4,7 @@ type RecurrencePayU struct {
 	Quantity     string   `json:"quantity"`
 	Installments string   `json:"installments"`
 	TrialDays    string   `json:"trialDays"`
+	NotifyUrl    string   `json:"notifyUrl"`
 	Customer     Customer `json:"customer"`
 	Plan         Plan     `json:"plan"`
 }

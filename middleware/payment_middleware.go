@@ -1,13 +1,13 @@
 package middleware
 
 import (
+	"RedSaludAtv/atv/entites"
 	"RedSaludAtv/atv/entites/payments"
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 )
@@ -15,8 +15,12 @@ import (
 func CreatePlan(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-type", "application/json")
 
+	var paymentPayU payments.PaymentPayU
+	_ = json.NewDecoder(r.Body).Decode(&paymentPayU)
+
 	var clientPayU payments.ClientPayU
-	_ = json.NewDecoder(r.Body).Decode(&clientPayU)
+	clientPayU.Email = paymentPayU.Mail
+	clientPayU.FullName = paymentPayU.CompleteName
 
 	requestByte, _ := json.Marshal(clientPayU)
 	requestReader := bytes.NewReader(requestByte)
@@ -24,6 +28,11 @@ func CreatePlan(w http.ResponseWriter, r *http.Request) {
 	/* var clientRequest payments.ClientPayU
 	clientRequest.Email =  validationDni.DniValidation
 	*/
+	if paymentPayU.CompleteName == "" || paymentPayU.Document == "" || paymentPayU.CardNumber == "" || paymentPayU.ExpMonth == "" || paymentPayU.ExpYear == "" || paymentPayU.Type == "" || paymentPayU.Phone == "" || paymentPayU.Mail == "" {
+		errorRequestValidation(w, "Value Required")
+		// log.Fatal("error")
+		return
+	}
 
 	reqBody := ioutil.NopCloser(requestReader)
 
@@ -44,14 +53,18 @@ func CreatePlan(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 
-		log.Fatal("Error", err)
+		errorRequest(w, err)
+		// log.Fatal("error", err.Error())
+		return
 
 	} else {
 		responseData, err := ioutil.ReadAll(res.Body)
 
 		if err != nil {
 
-			log.Fatal(err)
+			errorRequest(w, err)
+			// log.Fatal("error," + err.Error())
+			return
 
 		} else {
 
@@ -63,18 +76,42 @@ func CreatePlan(w http.ResponseWriter, r *http.Request) {
 			// fmt.Println("UBIGEO",responseEnterprise.Data.Ubigeo)
 
 			// utils.RespondWithSuccess(responseClient, w)
-			// CreateCard(responseClient.Id)
+			CreateCard(w, paymentPayU, responseClient.Id)
 
 		}
 	}
 }
 
-func CreateCard(w http.ResponseWriter, r *http.Request) {
-	w.Header().Add("Content-type", "application/json")
+func CreateCard(w http.ResponseWriter, paymentPayU payments.PaymentPayU, idClient string) {
+	// w.Header().Add("Content-type", "application/json")
 
-	reqBody := ioutil.NopCloser(r.Body)
+	// reqBody := ioutil.NopCloser(r.Body)
 
-	reqURL, _ := url.Parse("https://api.payulatam.com/payments-api/rest/v4.9/customers/8cfe88q78xgl/creditCards")
+	var cardPayU payments.CardPayU
+	cardPayU.Name = paymentPayU.CompleteName
+	cardPayU.Document = paymentPayU.Document
+	cardPayU.Number = paymentPayU.CardNumber
+	cardPayU.ExpMonth = paymentPayU.ExpMonth
+	cardPayU.ExpYear = paymentPayU.ExpYear
+	cardPayU.Type = paymentPayU.Type
+	cardPayU.Address.Line2 = "Address Name"
+	cardPayU.Address.Line2 = "17 25"
+	cardPayU.Address.Line3 = "of 301"
+	cardPayU.Address.PostalCode = "15021"
+	cardPayU.Address.City = "Lima"
+	cardPayU.Address.State = "Lima"
+	cardPayU.Address.Country = "PE"
+	cardPayU.Address.Phone = paymentPayU.Phone
+
+	fmt.Println("CardPayU")
+	fmt.Println(cardPayU)
+
+	requestByte, _ := json.Marshal(cardPayU)
+	requestReader := bytes.NewReader(requestByte)
+
+	reqBody := ioutil.NopCloser(requestReader)
+
+	reqURL, _ := url.Parse("https://api.payulatam.com/payments-api/rest/v4.9/customers/" + idClient + "/creditCards")
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	req := &http.Request{
@@ -92,28 +129,45 @@ func CreateCard(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 
-		log.Fatal("Error", err)
+		errorRequest(w, err)
+		// log.Fatal("error", err.Error())
+		return
 
 	} else {
 		responseData, err := ioutil.ReadAll(res.Body)
 
 		if err != nil {
 
-			log.Fatal(err)
+			errorRequest(w, err)
+			// log.Fatal("error", err.Error())
+			return
 
 		} else {
 			var responseCardPayU payments.CardPayUResponse
 			json.Unmarshal(responseData, &responseCardPayU)
-			fmt.Println(responseCardPayU)
+			fmt.Println(responseCardPayU.Token)
 
+			CreateRecurrence(w, idClient, responseCardPayU.Token)
 		}
 	}
 
 }
 
-func CreateRecurrence(w http.ResponseWriter, r *http.Request) {
-	w.Header().Add("Content-type", "application/json")
-	reqBody := ioutil.NopCloser(r.Body)
+func CreateRecurrence(w http.ResponseWriter, idClient string, tokenPayU string) {
+
+	var recurrencePayU payments.RecurrencePayU
+	recurrencePayU.Quantity = "1"
+	recurrencePayU.Installments = "1"
+	recurrencePayU.TrialDays = "0"
+	recurrencePayU.NotifyUrl = "https://mercadopago-devzamse.herokuapp.com/webcheckout"
+	recurrencePayU.Customer.Id = idClient
+	recurrencePayU.Customer.CreditCards = []payments.CreditCards{payments.CreditCards{Token: tokenPayU}}
+	recurrencePayU.Plan.PlanCode = "plan-day-oficial-1"
+
+	requestByte, _ := json.Marshal(recurrencePayU)
+	requestReader := bytes.NewReader(requestByte)
+
+	reqBody := ioutil.NopCloser(requestReader)
 
 	reqURL, _ := url.Parse("https://api.payulatam.com/payments-api/rest/v4.9/subscriptions/")
 	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
@@ -133,21 +187,50 @@ func CreateRecurrence(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 
-		log.Fatal("Error", err)
+		errorRequest(w, err)
+		// log.Fatal("error", err.Error())
+		return
 
 	} else {
 		responseData, err := ioutil.ReadAll(res.Body)
 
 		if err != nil {
 
-			log.Fatal(err)
+			errorRequest(w, err)
+			// log.Fatal("error", err.Error())
+			return
 
 		} else {
 
 			var responseRecurrence payments.RecurrencePayUResponse
 			json.Unmarshal(responseData, &responseRecurrence)
-			fmt.Println(responseRecurrence)
+			fmt.Println("el ID es")
+			fmt.Println(responseRecurrence.Id)
 
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(responseRecurrence)
 		}
 	}
+}
+
+func errorRequest(w http.ResponseWriter, err error) {
+	requestError := entites.SubsError{
+		Type:   "/api/atv/payment",
+		Title:  "Error 400",
+		Detail: "Bad Request," + err.Error(),
+	}
+	w.WriteHeader(http.StatusBadRequest)
+	json.NewEncoder(w).Encode(requestError)
+	return
+}
+
+func errorRequestValidation(w http.ResponseWriter, err string) {
+	requestError := entites.SubsError{
+		Type:   "/api/atv/payment",
+		Title:  "Error 400",
+		Detail: "Bad Request," + err,
+	}
+	w.WriteHeader(http.StatusBadRequest)
+	json.NewEncoder(w).Encode(requestError)
+	return
 }
