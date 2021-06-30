@@ -234,3 +234,12 @@ func errorRequestValidation(w http.ResponseWriter, err string) {
 	json.NewEncoder(w).Encode(requestError)
 	return
 }
+
+/* func CreateMultiPlan(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Content-type", "application/json")
+	var paymentGroupPayU payments.PaymentGroupPayU
+	_ = json.NewDecoder(r.Body).Decode(&paymentGroupPayU)
+
+	fmt.Println(paymentGroupPayU)
+
+}*/
