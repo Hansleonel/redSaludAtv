@@ -2,6 +2,7 @@ package dao
 
 import (
 	"RedSaludAtv/atv/entites/payments"
+	"fmt"
 )
 
 func (subscriptionDao SubscriptionDao) FindClients(id int64) ([]payments.PaymentClient, error) {
@@ -24,6 +25,8 @@ func (subscriptionDao SubscriptionDao) FindClients(id int64) ([]payments.Payment
 
 		}
 	}
+
+	fmt.Println(paymentClientArray)
 
 	return paymentClientArray, err
 }

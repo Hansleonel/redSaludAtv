@@ -5,7 +5,6 @@ type PaymentGroupPayU struct {
 }
 
 type PaymentPayU struct {
-	IdContratante string `json:"idContratante"`
 	CompleteName  string `json:"completeName"`
 	Document      string `json:"document"`
 	CardNumber    string `json:"cardNumber"`

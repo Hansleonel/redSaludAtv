@@ -22,6 +22,7 @@ func CreatePlan(w http.ResponseWriter, r *http.Request) {
 	clientPayU.Email = paymentPayU.Mail
 	clientPayU.FullName = paymentPayU.CompleteName
 
+	fmt.Println(clientPayU.Email)
 	requestByte, _ := json.Marshal(clientPayU)
 	requestReader := bytes.NewReader(requestByte)
 
@@ -103,8 +104,8 @@ func CreateCard(w http.ResponseWriter, paymentPayU payments.PaymentPayU, idClien
 	cardPayU.Address.Country = "PE"
 	cardPayU.Address.Phone = paymentPayU.Phone
 
-	fmt.Println("CardPayU")
-	fmt.Println(cardPayU)
+	fmt.Println("CardPayU Number")
+	fmt.Println(cardPayU.Number)
 
 	requestByte, _ := json.Marshal(cardPayU)
 	requestReader := bytes.NewReader(requestByte)
@@ -241,5 +242,32 @@ func errorRequestValidation(w http.ResponseWriter, err string) {
 	_ = json.NewDecoder(r.Body).Decode(&paymentGroupPayU)
 
 	fmt.Println(paymentGroupPayU)
+	var paymentPayU payments.PaymentPayU
+	_ = json.NewDecoder(r.Body).Decode(&paymentPayU)
+
+	var paymentClient payments.PaymentClient
+	paymentClient.IdClient = paymentPayU.IdContratante
+
+	db, err := config.GetMySQLDB()
+	if err != nil {
+
+	} else {
+		subscriptionDao := dao.SubscriptionDao{
+			Db: db,
+		}
+
+		clients, err := subscriptionDao.FindClients(paymentClient.IdClient)
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		} else {
+			fmt.Println("Size")
+			fmt.Println(len(clients))
+
+			for i := 0; i < len(clients); i++ {
+				go CreatePlan(w, r, clients[0].IdClient)
+			}
+		}
+	}
 
 }*/
